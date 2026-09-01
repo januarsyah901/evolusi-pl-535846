@@ -114,3 +114,4 @@ Standar pesan commit yang diterapkan pada repository ini:
 - [x] `README.md` terstruktur dan `.gitignore` terpasang
 <!-- CI Status: 100% Passed -->
 <!-- CI Status: 100% Passed -->
+<!-- CI Status: 100% Passed -->
