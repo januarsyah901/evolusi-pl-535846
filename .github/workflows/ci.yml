@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [main, dev, 'feature/**']
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  lint:
+    name: Lint & Validasi Sintaks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ambil kode
+        uses: actions/checkout@v4
+
+      - name: Siapkan Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Pasang dependensi
+        run: npm ci
+
+      - name: Validasi sintaks kode
+        run: npm run lint
+
+      - name: Validasi skema Prisma
+        run: npx prisma validate
+        env:
+          DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/postgres"
+          DIRECT_URL: "postgresql://postgres:postgres@localhost:5432/postgres"
+
+  uji:
+    name: Uji Unit & Endpoint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ambil kode
+        uses: actions/checkout@v4
+
+      - name: Siapkan Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Pasang dependensi
+        run: npm ci
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+        env:
+          DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/postgres"
+          DIRECT_URL: "postgresql://postgres:postgres@localhost:5432/postgres"
+
+      - name: Jalankan pengujian unit
+        run: npm test
